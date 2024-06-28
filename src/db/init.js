@@ -1,4 +1,4 @@
-/*const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./src/db/app.db');
 
 const dbInit = () => {
@@ -12,7 +12,18 @@ const dbInit = () => {
 
         // insert dummy data for use in db
         db.run("INSERT INTO roles (name) VALUES ('admin'), ('user')");
-        db.run("INSERT INTO users (username, password, role_id) VALUES ('admin', 'adminpass', 1), ('user1', 'user1pass', 2), ('user2', 'user2pass', 3), ('user3', 'user3pass', 4)");
+        db.run("INSERT INTO users (username, password, role_id) VALUES ('admin', 'adminpass', 1), ('user1', 'user1pass', 2), ('user2', 'user2pass', 3), ('user3', 'user3pass', 4)", function(err){
+            if (err) {
+                console.error(err.message);
+                return;
+              }
+            
+              if (this.changes === 0) {
+                console.log('Username already exists.');
+              } else {
+                console.log(`A row has been inserted with rowid ${this.lastID}`);
+              }
+        });
         db.run("INSERT INTO posts (title, content, user_id) VALUES ('First Post', 'This is the first post', 1)");
         db.run("INSERT INTO comments (content, post_id, user_id) VALUES ('First Comment', 1, 2)");
 
@@ -21,4 +32,4 @@ const dbInit = () => {
     db.close();
 };
 
-module.exports = dbInit;*/
+module.exports = dbInit;
