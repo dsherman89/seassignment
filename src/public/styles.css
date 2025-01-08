@@ -16,7 +16,8 @@
   
   /* Headings */
   h1, h2, h3, h4, h5, h6 {
-    color: #222; /* Slightly darker for emphasis */
+    /*color: #222;  Slightly darker for emphasis */
+    color: blue;
     margin-bottom: 10px;
   }
   

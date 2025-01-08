@@ -22,12 +22,9 @@ const postRoutes = require('./src/routes/postRoutes');
 
 // Static files from 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'src', 'public')));
 
-// fixes Cannot GET issues
-//app.get('/', (req, res) => {
-//    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-//});
-
+  
 app.get('/', (req, res) => {
 //    res.send('heres a message')
     res.sendFile(path.join(__dirname, 'src/public', 'index.html'), (err) => {
