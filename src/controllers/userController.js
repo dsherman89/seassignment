@@ -1,6 +1,6 @@
 
 const sqlite3 = require('sqlite3').verbose();
-const bcryt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const db = new sqlite3.Database('./src/db/app.db');
@@ -20,7 +20,8 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
 
     
-    const { username, password } = req.body;
+    const username = req.body.uname;  // Change from 'username' to 'uname'
+    const password = req.body.psw;    // Change from 'password' to 'psw'
 
     db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
         if (err) {

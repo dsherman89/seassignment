@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function(){
             },
             body: JSON.stringify({ username, password })
         })
+
+
+        
         .then(response => response.json())
         .then(data => {
             if(data.auth){
