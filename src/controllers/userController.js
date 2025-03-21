@@ -18,19 +18,39 @@ exports.register = (req, res) => {
 };
  
 exports.login = (req, res) => {
+
+    
     const { username, password } = req.body;
- 
-    db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
-        if (err) return res.status(500).send('Error on the server.');
-        if (!user) return res.status(404).send('No user found.');
- 
-        const passwordIsValid = bcrypt.compareSync(password, user.password);
-        if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
- 
-        const token = jwt.sign({ id: user.id }, 'supersecret', { expiresIn: 86400 }); // 24 hours
-        res.status(200).send({ auth: true, token });
+
+    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // Compare input password with hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
+
+        // Redirect based on role
+        if (user.role === 'admin') {
+            return res.redirect('/admin');
+        } else {
+            return res.redirect('/user');
+        }
     });
+
+
 };
+
+
  
 exports.getUser = (req, res) => {
     const { id } = req.params;
